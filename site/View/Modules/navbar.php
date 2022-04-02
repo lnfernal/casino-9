@@ -2,7 +2,7 @@
     <input type="checkbox" id="nav-check">
     <div class="nav-header">
         <div class="nav-title">
-            JoGeek
+            Casino
         </div>
     </div>
     <div class="nav-btn">
@@ -14,10 +14,14 @@
     </div>
 
     <div class="nav-links">
-        <a href="//github.io/jo_geek" target="_blank">Github</a>
-        <a href="http://stackoverflow.com/users/4084003/" target="_blank">Stackoverflow</a>
-        <a href="https://in.linkedin.com/in/jonesvinothjoseph" target="_blank">LinkedIn</a>
-        <a href="https://codepen.io/jo_Geek/" target="_blank">Codepen</a>
-        <a href="https://jsfiddle.net/user/jo_Geek/" target="_blank">JsFiddle</a>
+        <?php 
+            if(!isset($_SESSION['login'])){
+                echo '<a href="/auth/login">Login</a>';
+                echo '<a href="/auth/register">Cadastro</a>';
+            }else{
+                echo '<a href="/account">' . $_SESSION['login'] . '</a>';
+                echo '<a href="/auth/logout">Logout</a>';
+            }
+        ?>
     </div>
 </div>
