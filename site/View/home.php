@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <?php include 'Modules/navbar.php'; ?>
     <div class="grid">
         <div class="item">
             <p class="titulo">Número Atual: <span class="roulette"></span></p>
