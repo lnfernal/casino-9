@@ -23,6 +23,7 @@ class UserController
 
         if($user->verify()){
             $_SESSION['login'] = $user->username;
+            $_SESSION['key'] = $user->password;
             header('location: /');
         }else{
             $_SESSION['dados_incorretos'] = true;
@@ -41,6 +42,7 @@ class UserController
 
     public static function logout() {
         unset($_SESSION['login']);
+        unset($_SESSION['key']);
 
         header('location: /');
     }
