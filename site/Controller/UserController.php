@@ -47,10 +47,8 @@ class UserController
 
     public static function save() {
 
-        include 'Model/UserModel.php'; // inclusão do arquivo model.
+        include 'Model/UserModel.php'; 
 
-        // Abaixo cada propriedade do objeto sendo abastecida com os dados informados
-        // pelo usuário no formulário (note o envio via POST)
         $user = new UserModel();
 
         $user->username = $_POST['username'];
@@ -59,8 +57,8 @@ class UserController
         $user->data_nascimento = $_POST['data_nascimento'];
         $user->data_criado = date('Y-m-d H:i:s');
 
-        $user->save();  // chamando o método save da model.
+        $user->save();
 
-        header("Location: /pessoa"); // redirecionando o usuário para outra rota.
+        header("Location: /pessoa");
     }
 }
