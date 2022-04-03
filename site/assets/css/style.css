@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
 
+
 p {
     word-wrap: break-word;
 }
@@ -34,7 +35,7 @@ p {
 
 .roulette{
     border-radius: 15%;
-    font-family: 'Open Sans', 'Arial', sans-serif;
+    font-family: 'Open Sans', Arial, sans-serif;
     color: #ccc;
     text-align: center;
     display: flex;
@@ -46,7 +47,7 @@ p {
 }
 
 #bet_value{
-    width: 25%;
+    width: 10rem;
     font-size: larger;
     height: 3rem;
 }
@@ -55,8 +56,8 @@ p {
     cursor: pointer;
     border: none;
     height: 3rem;
-    width: 3rem;
-    border-radius: 10%;
+    width: 20vw;
+    border-radius: 10px;
     font-weight: bold;
 }
 

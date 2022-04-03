@@ -20,7 +20,7 @@
                 echo '<a href="/auth/register/form">Cadastro</a>';
             }else{
                 echo '<a href="/account">' . $_SESSION['login'] . '</a>';
-                echo '<a href="#">R$ ' . str_replace('.', ',', UserController::getBalance()) . '</a>';
+                echo '<a id="balance" href="#">R$ ' . str_replace('.', ',', UserController::getBalance()) . '</a>';
                 echo '<a href="/auth/logout">Logout</a>';
             }
         ?>
