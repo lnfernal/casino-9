@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
 
+body{
+    background-color: #0f1923;
+}
 
 p {
     word-wrap: break-word;
@@ -13,7 +16,7 @@ p {
 }
 
 .item {
-    background-color: aqua;
+    background-color: #1a242d;
     height: fit-content;
     text-align: center;
     padding: 15px;
@@ -23,17 +26,21 @@ p {
     min-height: 10rem;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
 }
 
 .titulo {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Inter', Courier, monospace;
     font-size: xx-large;
     display: flex;
     flex-wrap: nowrap;
     text-align: center;
+    margin: 0;
+    color: #b3b3b3;
+    font-weight: bold;
 }
 
-.roulette{
+.roulette {
     border-radius: 15%;
     font-family: 'Open Sans', Arial, sans-serif;
     color: #ccc;
@@ -46,13 +53,13 @@ p {
     justify-content: center;
 }
 
-#bet_value{
+#bet_value {
     width: 10rem;
     font-size: larger;
     height: 3rem;
 }
 
-.bet_btn{
+.bet_btn {
     cursor: pointer;
     border: none;
     height: 3rem;
@@ -61,35 +68,54 @@ p {
     font-weight: bold;
 }
 
-.row{
+.row {
     padding-top: 10;
 }
 
-.black{
-    background-color: #272727;
-    color: #969696;
+.black {
+    background-color: #343b4a;
+    color: #b6b6b6;
 }
 
-.red{
+.red {
     background-color: #CE3B3B;
     color: #6C0404;
 }
 
-.green{
+.green {
     background-color: #41B836;
     color: #075600;
 }
 
-.last_numbers{
+.last_numbers {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
 }
 
-.last_number{
+.last_number {
     height: 2rem;
     width: 2rem;
     line-height: 2rem;
     text-align: center;
     border-radius: 13%;
+    margin-right: 5;
+    animation: roulette-previous-in 1s ease-in-out forwards;
+    transition: all .5 ease;
+}
+
+@keyframes roulette-previous-in {
+    0% {
+        -webkit-transform: scale(.9);
+        transform: scale(.9);
+        right: -50px;
+        opacity: 0
+    }
+
+    to {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        right: 0;
+        opacity: 1
+    }
 }

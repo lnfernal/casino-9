@@ -15,15 +15,16 @@ class UserDAO
 
     function insert(UserModel $model)
     {
-        $sql = "INSERT INTO users (username, password, cpf, data_nascimento, data_criado) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO users (username, password, email, cpf, data_nascimento, data_criado) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = $this->conexao->prepare($sql);
 
         $stmt->bindValue(1, $model->username);
         $stmt->bindValue(2, $model->password);
-        $stmt->bindValue(3, $model->cpf);
-        $stmt->bindValue(4, $model->data_nascimento);
-        $stmt->bindValue(5, $model->data_criado);
+        $stmt->bindValue(3, $model->email);
+        $stmt->bindValue(4, $model->cpf);
+        $stmt->bindValue(5, $model->data_nascimento);
+        $stmt->bindValue(6, $model->data_criado);
 
         $stmt->execute();
     }

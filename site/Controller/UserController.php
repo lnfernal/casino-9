@@ -55,6 +55,7 @@ class UserController
 
         $user->username = $_POST['username'];
         $user->password = md5($_POST['password']);
+        $user->email = $_POST['email'];
         $user->cpf = $_POST['cpf'];
         $user->data_nascimento = $_POST['data_nascimento'];
         $user->data_criado = date('Y-m-d H:i:s');

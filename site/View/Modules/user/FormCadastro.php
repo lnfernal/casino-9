@@ -29,9 +29,23 @@ if (isset($_SESSION['login'])) {
           </div>
         </div>
         <div class="col_half">
+          <label>E-Mail</label>
+          <div class="input_field">
+            <input type="email" name="email" placeholder="seu@email.com" required />
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+      <div class="col_half">
           <label>Senha</label>
           <div class="input_field">
-            <input type="password" name="password" placeholder="*********" />
+            <input type="password" name="password" id="senha" placeholder="*********" />
+          </div>
+        </div>
+        <div class="col_half">
+          <label>Confirmação de Senha</label>
+          <div class="input_field">
+            <input type="password" name="confirma_senha" id="confirmasenha" placeholder="*********" />
           </div>
         </div>
       </div>

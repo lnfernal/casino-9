@@ -3,7 +3,7 @@
 class UserModel
 {
 
-    public $id, $username, $password, $balance, $cpf, $data_nascimento, $data_criado;
+    public $id, $username, $password, $balance, $cpf, $email, $data_nascimento, $data_criado;
 
     public function save(){
         include 'DAO/UserDAO.php';
