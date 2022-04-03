@@ -11,10 +11,24 @@
 </head>
 
 <body>
+    <noscript>You must need to enable JavaScript to use this website.</noscript>
     <?php include 'Modules/navbar.php'; ?>
     <div class="grid">
         <div class="item">
             <p class="titulo">Número Atual: <span class="roulette"></span></p>
+
+            <p class="titulo">Últimos 10 Números:</p>
+
+            <div class="last_numbers">
+            </div>
+
+            <input id="bet_value" placeholder="Quantia (R$)">
+            <div class="row">
+                <button class="bet_btn black" id="bet_black">x2</button>
+                <button class="bet_btn green" id="bet_green">x14</button>
+                <button class="bet_btn red" id="bet_red">x2</button>
+            </div>
+
         </div>
         <div class="item">
             <p class="titulo">Crash Atual: <span class="crash"></span>x</p>

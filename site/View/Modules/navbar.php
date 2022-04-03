@@ -16,10 +16,11 @@
     <div class="nav-links">
         <?php 
             if(!isset($_SESSION['login'])){
-                echo '<a href="/auth/login">Login</a>';
-                echo '<a href="/auth/register">Cadastro</a>';
+                echo '<a href="/auth/login/form">Login</a>';
+                echo '<a href="/auth/register/form">Cadastro</a>';
             }else{
                 echo '<a href="/account">' . $_SESSION['login'] . '</a>';
+                echo '<a href="#">R$ ' . str_replace('.', ',', UserController::getBalance()) . '</a>';
                 echo '<a href="/auth/logout">Logout</a>';
             }
         ?>

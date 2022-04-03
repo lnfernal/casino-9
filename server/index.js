@@ -8,6 +8,8 @@ let connection = mysql.createConnection({
     database: 'casino'
 });
 
+let last_numbers = []
+
 connection.connect((err) => {
     if (err) {
         console.error(`Error connecting to MySQL: ${err.message}`)
@@ -19,6 +21,13 @@ connection.connect((err) => {
 io.on('connection', (socket) => {
     console.log(`Um novo usuário se conectou: ${socket.id}`)
     consolelog(`Your Socket's connection ID: ${socket.id}`, socket.id)
+
+    socket.emit('last_numbers', last_numbers)
+
+    socket.on('bet', bet => {
+        console.log(bet)
+        console.log(socket.id)
+    })
 })
 
 function consolelog(content, reciptentId) {
@@ -31,7 +40,16 @@ function generateNumber(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+
 setInterval(function () {
     let num = generateNumber(0, 14)
+
+    if(last_numbers.length < 10){
+        last_numbers.push(num)
+    }else{
+        last_numbers.shift()
+        last_numbers.push(num)
+    }
+
     io.sockets.emit('number', num)
-}, 5000);
+}, 10000);
