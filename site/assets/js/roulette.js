@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var socket = io("http://192.168.2.100:8000", { transports: ['websocket', 'polling', 'flashsocket'] });
+    var socket = io("http://192.168.2.102:8000", { transports: ['websocket', 'polling', 'flashsocket'] });
 
     socket.on('consolelog', function (content) {
         console.log(content)

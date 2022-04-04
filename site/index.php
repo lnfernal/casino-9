@@ -30,7 +30,7 @@ switch($url){
         UserController::logout();
     break;
 
-    case '/game/mines':
+    case '/games/mines':
         include 'View/mines.php';
     break;
 }

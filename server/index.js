@@ -55,6 +55,28 @@ io.on('connection', (socket) => {
             }
         })
     })
+
+    socket.on('mines_bet', mine_bet => {
+        if(mine_bet.auth.length > 32){
+            let pass = mine_bet.auth.slice(0, 32)
+            let user = mine_bet.auth.slice(32, mine_bet.auth.length)
+    
+            connection.query(`SELECT balance FROM users WHERE username = '${user}' AND password = '${pass}';`, (err, row) => {
+                if (err) {
+                    console.log(err)
+                    io.sockets.to(socket.id).emit('notify_error', err)
+                } else {
+                    if (row.length > 0) {
+                        if (mine_bet.value <= row[0].balance) {
+                            io.sockets.to(mine_bet.socket_id).emit('notify_success', 'Mines iniciado')
+                        } else {
+                            io.sockets.to(socket.id).emit('notify_error', 'Saldo Insuficiente')
+                        }
+                    }
+                }
+            })
+        }
+    })
 })
 
 function consolelog(content, reciptentId) {

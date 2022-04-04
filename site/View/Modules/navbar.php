@@ -14,6 +14,7 @@
     </div>
 
     <div class="nav-links">
+        <a href="/games/mines">Mines</a>
         <?php 
             if(!isset($_SESSION['login'])){
                 echo '<a href="/auth/login/form">Login</a>';

@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+body {
+    --background: #0f1923;
+    --grey: #1a242d;
+    --grey-border: #323b45;
+    --yellow-gold: #ddb43f;
+    --red: #F12C4C;
+    background-color: var(--background);
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+.content {
+    max-width: 1104px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 16px;
+}
+
+.game-controller-container {
+    position: relative;
+    overflow: visible;
+    display: flex;
+    border-radius: 4px;
+    background-color: #1a242d;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 20px 0 rgb(6 10 14 / 25%);
+}
+
+.controller {
+    border-radius: 4px 0 0 4px;
+    background-color: #1a242d;
+    width: 325px;
+    padding: 16px 24px;
+    flex-shrink: 0;
+    border-right: 1px solid #323b45;
+}
+
+.body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+}
+
+.input-label{
+    color: #797B95;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: smaller;
+}
+
+select#mine-amount{
+    background-color: var(--background);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 2.5rem;
+    border-radius: 4px;
+    padding: 8px;
+    color: #bcbfc7;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: none;
+}
+
+option {
+    font-weight: normal;
+    display: block;
+    white-space: nowrap;
+    min-height: 1.2em;
+    padding: 0px 2px 1px;
+}
+
+.bet-amount{
+    background: var(--background);
+    width: 100%;
+    font-size: larger;
+    font-family: 'Inter';
+    height: 3rem;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    color: #aab0c3;
+    padding-left: 1rem;
+    font-weight: bold;
+}
+
+.btn{
+    font-family: 'Inter';
+    height: 3rem;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding-left: 1rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn.bet-controller{
+    background: var(--grey);
+    border: 1px solid var(--grey-border);
+    width: 45%;
+    color: #aab0c3;
+    font-size: larger;
+}
+
+#start-mines.btn{
+    background-color: var(--red);
+    color: #fff;
+    border: none;
+}
+
+.mine-wrapper{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    height: 700px;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+}
+
+.game{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.game-controller-container .game {
+    padding: 14px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.board{
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(5,auto);
+    grid-template-rows: repeat(5,auto);
+    grid-gap: 1em 1em;
+    gap: 1em 1em;
+    flex: 1 1;
+    padding: 30px;
+}
+
+.mine-cell{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 10px;
+}
+
+.mine-cell.unrevealed{
+    background-color: #16202b;
+    background-image: url('/assets/img/interrogacao.png');
+    cursor: pointer;
+}
+
+.mine-cell.unrevealed:hover{
+    background-color: #1c2631;
+}
+
+.mine-cell.revealed{
+    cursor: not-allowed;
+}
+
+.mine-cell.revealed.win{
+    background-color: var(--yellow-gold);
+    background-image: url('/assets/img/star.png');
+}
+
+.mine-cell.revealed.loss{
+    background-color: var(--red);
+    background-image: url('/assets/img/bomb.png');
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
