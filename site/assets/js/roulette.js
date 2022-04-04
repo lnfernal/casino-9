@@ -24,15 +24,28 @@ $(document).ready(function () {
         })
     }
 
-    /*
+    
     socket.on('new_entry', function(new_entry){
-        $('#bet_buttons').children('.col').each(function() {
-            if(this.id.split('_')[0] == new_entry.color){
-                this.innerHTML += `<div class="bet_entry"><div class="entry_username">${new_entry.username}</div><div class="entry_amount">R$ ${new_entry.value}</div></div>`
-            }
-        })
+        let entry_color = new_entry.color
+        let username = new_entry.username
+        let value = Number(new_entry.value)
+
+        let new_entry_element = `<div class="bet_entry"><div class="entry_username">${username}</div><div class="entry_amount">R$ ${value.toFixed(2)}</div></div>`
+
+        if(entry_color == 'black'){
+            $('#black_entries').append(new_entry_element)
+            $('#black_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
+        }else if(entry_color == 'green'){
+            $('#green_entries').append(new_entry_element)
+            $('#green_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
+        }else if(entry_color == 'red'){
+            $('#red_entries').append(new_entry_element)
+            $('#red_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
+        }
+
+        
     })
-    */
+    
     
     socket.on('number', function (number) {
         if ($('.last_number').length >= 10) {
