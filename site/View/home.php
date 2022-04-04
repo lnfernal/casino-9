@@ -78,7 +78,7 @@
             <p class="titulo">Crash Atual: <span class="crash"></span>x</p>
         </div>
     </div>
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/roulette.js"></script>
 </body>
 
 </html>
