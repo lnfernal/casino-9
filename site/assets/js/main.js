@@ -24,6 +24,16 @@ $(document).ready(function () {
         })
     }
 
+    /*
+    socket.on('new_entry', function(new_entry){
+        $('#bet_buttons').children('.col').each(function() {
+            if(this.id.split('_')[0] == new_entry.color){
+                this.innerHTML += `<div class="bet_entry"><div class="entry_username">${new_entry.username}</div><div class="entry_amount">R$ ${new_entry.value}</div></div>`
+            }
+        })
+    })
+    */
+    
     socket.on('number', function (number) {
         if ($('.last_number').length >= 10) {
             $('.last_numbers').find('.last_number').first().remove()
@@ -47,7 +57,16 @@ $(document).ready(function () {
             $('.roulette').css('background', '#41B836')
             $('.roulette').css('color', '#075600')
         }
+
         $('.roulette').text(`${number}`)
+
+        $('#black_bets_total').html('0.00')
+        $('#green_bets_total').html('0.00')
+        $('#red_bets_total').html('0.00')
+
+        $('#bet_buttons').children('.col').children('.bet_entry').each(function(){
+            this.remove()
+        })
     })
 
     socket.on('last_numbers', last_numbers => {

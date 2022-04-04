@@ -48,6 +48,8 @@ io.on('connection', (socket) => {
                         });
                         io.sockets.to(socket.id).emit('decrease_balance', bet.value)
                         io.sockets.to(socket.id).emit('notify_success', 'Aposta realizada com sucesso')
+
+                        io.sockets.emit('new_entry', {username: user, value: bet.value, color: bet.color})
                     }
                 }
             }
@@ -78,27 +80,27 @@ setInterval(function () {
     }
 
     if (current_bets.length > 0) {
-        current_bets.forEach(bet => {
-            if (bet.color == color) {
-                let username = bet.username
+        current_bets.forEach(new_bet => {
+            if (new_bet.color == color) {
+                let username = new_bet.username
                 if (color != 'green') {
-                    connection.query(`UPDATE users SET balance = balance + ${bet.value * 2} WHERE username = '${username}'`, err => {
+                    connection.query(`UPDATE users SET balance = balance + ${new_bet.value * 2} WHERE username = '${username}'`, err => {
                         if (err) {
                             console.log(err)
                         }
                     })
 
-                    io.sockets.to(bet.socket_id).emit('notify_success', `Você ganhou R$${(bet.value * 2).toFixed(2).toString().replace('.', ',')} com sua aposta!`)
-                    io.sockets.to(bet.socket_id).emit('increase_balance', bet.value * 2)
+                    io.sockets.to(new_bet.socket_id).emit('notify_success', `Você ganhou R$${(new_bet.value * 2).toFixed(2).toString().replace('.', ',')} com sua aposta!`)
+                    io.sockets.to(new_bet.socket_id).emit('increase_balance', new_bet.value * 2)
                 } else {
-                    connection.query(`UPDATE users SET balance = balance + ${bet.value * 14} WHERE username = '${username}'`, err => {
+                    connection.query(`UPDATE users SET balance = balance + ${new_bet.value * 14} WHERE username = '${username}'`, err => {
                         if (err) {
                             console.log(err)
                         }
                     })
 
-                    io.sockets.to(bet.socket_id).emit('notify_success', `Você ganhou R$${(bet.value * 14).toFixed(2).toString().replace('.', ',')} com sua aposta!`)
-                    io.sockets.to(bet.socket_id).emit('increase_balance', bet.value * 14)
+                    io.sockets.to(new_bet.socket_id).emit('notify_success', `Você ganhou R$${(new_bet.value * 14).toFixed(2).toString().replace('.', ',')} com sua aposta!`)
+                    io.sockets.to(new_bet.socket_id).emit('increase_balance', new_bet.value * 14)
                 }
             }
         })

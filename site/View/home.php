@@ -39,10 +39,38 @@
             <div class="last_numbers"></div>
 
             <input id="bet_value" placeholder="Quantia (R$)">
-            <div class="row">
-                <button class="bet_btn black" id="bet_black">x2</button>
-                <button class="bet_btn green" id="bet_green">x14</button>
-                <button class="bet_btn red" id="bet_red">x2</button>
+            <div class="row" id="bet_buttons">
+                <div class="col" id="black_entries"><button class="bet_btn black" id="bet_black">x2</button>
+                    <div class="bets_total">
+                        <div>Total apostas</div>
+                        <div class="bets_counter">R$ <span id="black_bets_total">0.00</span></div>
+                    </div>
+                    <div class="entries_header">
+                        <div>Usuário</div>
+                        <div>Quantia</div>
+                    </div>
+                </div>
+                <div class="col" id="green_entries"><button class="bet_btn green" id="bet_green">x14</button>
+                <div class="bets_total">
+                        <div>Total apostas</div>
+                        <div class="bets_counter">R$ <span id="green_bets_total">0.00</span></div>
+                    </div>
+                    <div class="entries_header">
+                        <div>Usuário</div>
+                        <div>Quantia</div>
+                    </div>
+                </div>
+                <div class="col" id="red_entries"><button class="bet_btn red" id="bet_red">x2</button>
+                <div class="bets_total">
+                        <div>Total apostas</div>
+                        <div class="bets_counter">R$ <span id="red_bets_total">0.00</span></div>
+                    </div>
+                    <div class="entries_header">
+                        <div>Usuário</div>
+                        <div>Quantia</div>
+                    </div>
+                </div>
+
             </div>
 
         </div>

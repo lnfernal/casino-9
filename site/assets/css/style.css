@@ -114,6 +114,7 @@ p {
 
 .row {
     padding-top: 10;
+    display: flex;
 }
 
 .black {
@@ -146,6 +147,88 @@ p {
     margin-right: 5;
     animation: roulette-previous-in 1s ease-in-out forwards;
     transition: all .5 ease;
+}
+
+.bet_entry{
+    border-bottom: 1px solid #323b45;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.col{
+    padding: 10;
+}
+
+.entries_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    height: 32px;
+    border-radius: 4px;
+    background-color: #262f3c;
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2;
+    letter-spacing: normal;
+    color: #bcbfc7;
+    padding: 0 16px;
+}
+
+.bets_total{
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+    font-size: 12px;
+    line-height: 1.33;
+    color: #fff;
+    padding: 0 8px;
+}
+
+.bets_counter{
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+}
+
+.entry_username{
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #aab0c3;
+    text-align: left;
+    padding-right: 15px;
+    display: flex;
+    align-items: center;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+}
+
+.entry_amount{
+    font-size: 12px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #fff;
+    white-space: nowrap;
 }
 
 @keyframes roulette-previous-in {
