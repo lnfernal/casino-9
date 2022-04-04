@@ -7,7 +7,7 @@ session_start();
 
 switch($url){
     case '/':
-        include 'View/home.php';
+        include 'View/roulette.php';
     break;
 
     case '/auth/register/form':
@@ -28,6 +28,10 @@ switch($url){
 
     case '/auth/logout':
         UserController::logout();
+    break;
+
+    case '/game/mines':
+        include 'View/mines.php';
     break;
 }
 

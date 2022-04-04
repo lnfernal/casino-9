@@ -101,7 +101,19 @@ p {
     width: 10rem;
     font-size: larger;
     height: 3rem;
+    margin-top: 10px;
+    background-color: #0f1923;
+    border-radius: 5px;
+    border: none;
+    color: #aab0c3;
+    padding-left: 1rem;
 }
+
+#bet_value:invalid {
+    border: 2px solid #CE3B3B;
+    color: #CE3B3B
+}
+
 
 .bet_btn {
     cursor: pointer;

@@ -37,10 +37,10 @@ $(document).ready(function () {
             $('#black_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
         }else if(entry_color == 'green'){
             $('#green_entries').append(new_entry_element)
-            $('#green_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
+            $('#green_bets_total').html((Number($('#green_bets_total').html()) + value).toFixed(2))
         }else if(entry_color == 'red'){
             $('#red_entries').append(new_entry_element)
-            $('#red_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
+            $('#red_bets_total').html((Number($('#red_bets_total').html()) + value).toFixed(2))
         }
     })
     
