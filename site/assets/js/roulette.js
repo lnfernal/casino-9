@@ -42,8 +42,6 @@ $(document).ready(function () {
             $('#red_entries').append(new_entry_element)
             $('#red_bets_total').html((Number($('#black_bets_total').html()) + value).toFixed(2))
         }
-
-        
     })
     
     
