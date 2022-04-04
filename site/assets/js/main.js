@@ -5,12 +5,31 @@ $(document).ready(function () {
         console.log(content)
     })
 
+    let array_inicial = [0, 11, 5, 10, 6, 9, 7, 8, 1, 14, 2, 13, 3, 12, 4]
+
+    let i = 0
+
+    while(i < 200){
+        let color = ''
+        array_inicial.forEach(n => {
+            if(n == 0){
+                color = 'green'
+            }else if(n > 7){
+                color = 'black'
+            }else{
+                color = 'red'
+            }
+            $('.roulette_numbers').html($('.roulette_numbers').html() + '<div class="roulette_number ' + color + '">' + n.toString() + '</div>')
+            i++
+        })
+    }
+
     socket.on('number', function (number) {
         if ($('.last_number').length >= 10) {
             $('.last_numbers').find('.last_number').first().remove()
         }
 
-        if (number >= 8) {
+        if (number > 7) {
             $('.last_numbers').append(`<div class="last_number black">${number}</div>`)
         } else if (number <= 7 && number != 0) {
             $('.last_numbers').append(`<div class="last_number red">${number}</div>`)
@@ -19,8 +38,8 @@ $(document).ready(function () {
         }
 
         if (number > 7) {
-            $('.roulette').css('background', '#272727')
-            $('.roulette').css('color', '#969696')
+            $('.roulette').css('background-color', '#343b4a')
+            $('.roulette').css('color', '#b6b6b6')
         } else if (number <= 7 && number != 0) {
             $('.roulette').css('background', '#CE3B3B')
             $('.roulette').css('color', '#6C0404')
