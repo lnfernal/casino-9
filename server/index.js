@@ -12,6 +12,24 @@ let last_numbers = []
 
 let current_bets = []
 
+let current_mines = []
+
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+}
+
+function endMineGame(game_id){
+    let game = current_mines.find(g => g.socket_id === game_id)
+    current_mines.remove(game)
+}
+
 connection.connect((err) => {
     if (err) {
         console.error(`Error connecting to MySQL: ${err.message}`)
@@ -49,28 +67,77 @@ io.on('connection', (socket) => {
                         io.sockets.to(socket.id).emit('decrease_balance', bet.value)
                         io.sockets.to(socket.id).emit('notify_success', 'Aposta realizada com sucesso')
 
-                        io.sockets.emit('new_entry', {username: user, value: bet.value, color: bet.color})
+                        io.sockets.emit('new_entry', { username: user, value: bet.value, color: bet.color })
                     }
                 }
             }
         })
     })
 
+    socket.on('mine_clicked', mine => {
+        let game = current_mines.find(g => g.socket_id === socket.id)
+
+        if(!game.clicked_items.includes(mine.clicked_button_id)){
+            game.addClicked(mine.clicked_button_id)
+            if(game.array[mine.clicked_button_id] == 0){
+                io.sockets.to(socket.id).emit('loss', mine.clicked_button_id)
+                endMineGame(socket.id)
+            }else{
+                game.addHit()
+                io.sockets.to(socket.id).emit('new_payback', (game.multiplicador - 1) * game.hits * game.bet)
+                io.sockets.to(socket.id).emit('win', mine.clicked_button_id)
+            }
+        }
+    })
+
+    socket.on('end_mine_game', game_id => {
+        let game = current_mines.find(g => g.socket_id === socket.id)
+
+        let payback = (game.multiplicador - 1)* game.hits * game.bet
+
+        connection.query(`UPDATE users SET balance = balance + ${payback} WHERE username = '${game.author}'`, err => {
+            if(err){
+                console.log(err)
+            }
+        })
+
+        endMineGame(game_id)
+
+        io.sockets.to(socket.id).emit('notify_success', `Você ganhou R$${payback.toFixed(2)} com sua aposta!`)
+        io.sockets.to(socket.id).emit('reset_board', socket.id)
+        io.sockets.to(socket.id).emit('increase_balance', Number(payback - 1))
+    })
+
     socket.on('mines_bet', mine_bet => {
-        if(mine_bet.auth.length > 32){
+        if (mine_bet.auth.length > 32) {
             let pass = mine_bet.auth.slice(0, 32)
             let user = mine_bet.auth.slice(32, mine_bet.auth.length)
-    
+
             connection.query(`SELECT balance FROM users WHERE username = '${user}' AND password = '${pass}';`, (err, row) => {
                 if (err) {
                     console.log(err)
                     io.sockets.to(socket.id).emit('notify_error', err)
                 } else {
                     if (row.length > 0) {
-                        if (mine_bet.value <= row[0].balance) {
-                            io.sockets.to(mine_bet.socket_id).emit('notify_success', 'Mines iniciado')
-                        } else {
-                            io.sockets.to(socket.id).emit('notify_error', 'Saldo Insuficiente')
+                        if(!current_mines.find(g => g.socket_id === socket.id)){
+                            if (mine_bet.value <= row[0].balance) {
+                                io.sockets.to(mine_bet.socket_id).emit('notify_success', 'Jogo Iniciado')
+                                connection.query(`UPDATE users SET balance = balance - ${mine_bet.value} WHERE username = '${user}'`, err => {
+                                    if(err){
+                                        console.log(err)
+                                    }else{
+                                        io.sockets.to(socket.id).emit('decrease_balance', mine_bet.value)
+                                    }
+                                })
+    
+                                current_mines.push(new MineGame(mine_bet.socket_id, mine_bet.mine_count, mine_bet.value, user))
+    
+                                io.sockets.to(socket.id).emit('start_mine_game', socket.id)
+                            } else {
+                                io.sockets.to(socket.id).emit('notify_error', 'Saldo Insuficiente')
+                            }
+                        }else{
+                            io.sockets.to(socket.id).emit('notify_error', 'Um jogo já foi iniciado')
                         }
                     }
                 }
@@ -78,6 +145,63 @@ io.on('connection', (socket) => {
         }
     })
 })
+
+class MineGame {
+    constructor(socket_id, mine_count, bet, author, array, multiplier, hits, clicked_items, probability) {
+        this.socket_id = socket_id
+        this.mine_count = mine_count
+        this.bet = bet
+        this.author = author
+
+        this.clicked_items = []
+
+        this.hits = 0
+
+        this.probability = (25 - mine_count) / 25
+
+        this.multiplier = function(){
+            return 0.97 / this.probability
+        }
+
+        this.addHit = function(){
+            this.hits++
+        }
+
+        this.addClicked = function(number){
+            this.clicked_items.push(number)
+        }
+
+        this.array = []
+
+        for (let i = 0; i < 25; i++) {
+            let num = generateNumber(0, 1)
+
+            let qtd_de_minas = this.array.filter(x => x === 0).length
+
+            if(qtd_de_minas < this.mine_count){
+                this.array.push(num)
+            }else{
+                this.array.push(1)
+            }
+        }
+    }
+
+    get multiplicador(){
+        return this.CalculoMultiplicador()
+    }
+
+    CalculoMultiplicador(){
+        return 0.97/this.probability
+    }
+
+    get hitQty(){
+        return this.hits
+    }
+
+    get pegaArray() {
+        return this.array
+    }
+}
 
 function consolelog(content, reciptentId) {
     io.sockets.to(reciptentId).emit('consolelog', content)

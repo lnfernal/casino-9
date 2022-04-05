@@ -14,28 +14,71 @@ $(document).ready(function () {
     }
 
     $(document).on('keydown', 'input[pattern]', function (e) {
-        var input = $(this);
-        var oldVal = input.val();
-        var regex = new RegExp(input.attr('pattern'), 'g');
+        var input = $(this)
+        var oldVal = input.val()
+        var regex = new RegExp(input.attr('pattern'), 'g')
 
         setTimeout(function () {
-            var newVal = input.val();
+            var newVal = input.val()
             if (!regex.test(newVal)) {
-                input.val(oldVal);
+                input.val(oldVal)
             }
-        }, 1);
-    });
+        }, 1)
+    })
+
+    $('.mine-cell.unrevealed').click(function(){
+        if($('#start-mines').html().includes('Começar o Jogo')){
+            alertify.error('Você deve começar um jogo')
+        }else{
+            socket.emit('mine_clicked', {game_id: socket.id, clicked_button_id: $(this).attr('id')})
+        }
+    })
+
+    socket.on('new_payback', value => {
+        $('#start-mines').html(`Sacar R$${value.toFixed(2)}`)
+    })
+
+    socket.on('reset_board', function() {
+        $('.mine-cell').each(function(){
+            if($(this).hasClass('revealed')){
+                if($(this).hasClass('win')){
+                    $(this).removeClass('win')
+                }else if($(this).hasClass('loss')){
+                    $(this).removeClass('loss')
+                }
+                $(this).removeClass('revealed')
+                $(this).addClass('unrevealed')
+            }
+        })
+    })
 
     $('#start-mines').click(function(){
         if ($('meta[name="auth"]').attr('content') != 'noauth') {
-            if($('#bet-amount').val() >= 0.1){
-                socket.emit('mines_bet', {value: $('#bet-amount').val(), mine_count: $('#mine-amount').val(), socket_id: socket.id, auth: $('meta[name="auth"]').attr('content')})
+            if($('#start-mines').html().includes('Sacar')){
+                socket.emit('end_mine_game', socket.id)
+                $('#start-mines').html('Começar o Jogo')
             }else{
-                alertify.error('Você deve apostar R$0.10 no mínimo')
+                if($('#bet-amount').val() >= 0.1){
+                    socket.emit('mines_bet', {value: $('#bet-amount').val(), mine_count: $('#mine-amount').val(), socket_id: socket.id, auth: $('meta[name="auth"]').attr('content')})
+                }else{
+                    alertify.error('Você deve apostar R$0.10 no mínimo')
+                }
             }
         }else{
             alertify.error('Você deve estar logado para jogar')
         }
+    })
+
+    socket.on('win', mine => {
+        $(`#${mine}`).removeClass('unrevealed').addClass('revealed').addClass('win')
+    })
+
+    socket.on('loss', mine => {
+        $(`#${mine}`).removeClass('unrevealed').addClass('revealed').addClass('loss')
+    })
+
+    socket.on('start_mine_game', game_id => {
+        $('#start-mines').html(`Sacar ${Number($('#bet-amount').val()).toFixed(2)}`)
     })
 
     $('#double').click(function () {
