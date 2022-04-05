@@ -39,9 +39,6 @@ connection.connect((err) => {
 })
 
 io.on('connection', (socket) => {
-    console.log(`Um novo usuário se conectou: ${socket.id}`)
-    consolelog(`Your Socket's connection ID: ${socket.id}`, socket.id)
-
     socket.emit('last_numbers', last_numbers)
 
     socket.on('bet', bet => {

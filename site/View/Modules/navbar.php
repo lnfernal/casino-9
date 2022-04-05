@@ -14,6 +14,7 @@
     </div>
 
     <div class="nav-links">
+        <a href="/">Roulette</a>
         <a href="/games/mines">Mines</a>
         <?php 
             if(!isset($_SESSION['login'])){
