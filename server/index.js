@@ -76,36 +76,39 @@ io.on('connection', (socket) => {
 
     socket.on('mine_clicked', mine => {
         let game = current_mines.find(g => g.socket_id === socket.id)
-
-        if(!game.clicked_items.includes(mine.clicked_button_id)){
-            game.addClicked(mine.clicked_button_id)
-            if(game.array[mine.clicked_button_id] == 0){
-                io.sockets.to(socket.id).emit('loss', mine.clicked_button_id)
-                endMineGame(socket.id)
-            }else{
-                game.addHit()
-                io.sockets.to(socket.id).emit('new_payback', (game.multiplicador - 1) * game.hits * game.bet)
-                io.sockets.to(socket.id).emit('win', mine.clicked_button_id)
+        if(game){
+            if(!game.clicked_items.includes(mine.clicked_button_id)){
+                game.addClicked(mine.clicked_button_id)
+                if(game.array_bombs.indexOf(Number(mine.clicked_button_id)) >= 0){
+                    io.sockets.to(socket.id).emit('loss', mine.clicked_button_id)
+                    endMineGame(socket.id)
+                }else{
+                    game.addHit()
+                    game.multiply()
+                    io.sockets.to(socket.id).emit('new_payback', game.current_payback.toFixed(2))
+                    io.sockets.to(socket.id).emit('win', mine.clicked_button_id)
+                }
             }
+        }else{
+            io.sockets.to(socket.id).emit('notify_error', 'Você deve começar um novo jogo')
         }
     })
 
     socket.on('end_mine_game', game_id => {
         let game = current_mines.find(g => g.socket_id === socket.id)
 
-        let payback = (game.multiplicador - 1)* game.hits * game.bet
-
-        connection.query(`UPDATE users SET balance = balance + ${payback} WHERE username = '${game.author}'`, err => {
-            if(err){
-                console.log(err)
-            }
-        })
-
-        endMineGame(game_id)
-
-        io.sockets.to(socket.id).emit('notify_success', `Você ganhou R$${payback.toFixed(2)} com sua aposta!`)
+        if(game){
+            connection.query(`UPDATE users SET balance = balance + ${game.current_payback} WHERE username = '${game.author}'`, err => {
+                if(err){
+                    console.log(err)
+                }
+            })
+            
+            endMineGame(game_id)
+            io.sockets.to(socket.id).emit('notify_success', `Você ganhou R$${game.current_payback.toFixed(2)} com sua aposta!`)
+            io.sockets.to(socket.id).emit('increase_balance', Number(game.current_payback))
+        }
         io.sockets.to(socket.id).emit('reset_board', socket.id)
-        io.sockets.to(socket.id).emit('increase_balance', Number(payback - 1))
     })
 
     socket.on('mines_bet', mine_bet => {
@@ -147,11 +150,12 @@ io.on('connection', (socket) => {
 })
 
 class MineGame {
-    constructor(socket_id, mine_count, bet, author, array, multiplier, hits, clicked_items, probability) {
+    constructor(socket_id, mine_count, bet, author, current_payback, array_bombs, multiplier, hits, clicked_items, probability) {
         this.socket_id = socket_id
         this.mine_count = mine_count
         this.bet = bet
         this.author = author
+        this.current_payback = bet
 
         this.clicked_items = []
 
@@ -167,21 +171,23 @@ class MineGame {
             this.hits++
         }
 
+        this.multiply = function(){
+            this.current_payback = this.current_payback * 0.97/this.probability
+        }
+
         this.addClicked = function(number){
             this.clicked_items.push(number)
         }
 
-        this.array = []
+        this.array_bombs = []
 
-        for (let i = 0; i < 25; i++) {
-            let num = generateNumber(0, 1)
+        for(let i = 0; i < mine_count; i++){
+            let num = generateNumber(0, 24)
 
-            let qtd_de_minas = this.array.filter(x => x === 0).length
-
-            if(qtd_de_minas < this.mine_count){
-                this.array.push(num)
+            if(this.array_bombs.includes(num)){
+                i--
             }else{
-                this.array.push(1)
+                this.array_bombs.push(num)
             }
         }
     }

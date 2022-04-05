@@ -35,7 +35,7 @@ $(document).ready(function () {
     })
 
     socket.on('new_payback', value => {
-        $('#start-mines').html(`Sacar R$${value.toFixed(2)}`)
+        $('#start-mines').html(`Sacar R$${value}`)
     })
 
     socket.on('reset_board', function() {
