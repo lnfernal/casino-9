@@ -50,13 +50,14 @@ $(document).ready(function () {
                 $(this).addClass('unrevealed')
             }
         })
+
+        $('#start-mines').html('Começar o Jogo')
     })
 
     $('#start-mines').click(function(){
         if ($('meta[name="auth"]').attr('content') != 'noauth') {
             if($('#start-mines').html().includes('Sacar')){
                 socket.emit('end_mine_game', socket.id)
-                $('#start-mines').html('Começar o Jogo')
             }else{
                 if($('#bet-amount').val() >= 0.1){
                     socket.emit('mines_bet', {value: $('#bet-amount').val(), mine_count: $('#mine-amount').val(), socket_id: socket.id, auth: $('meta[name="auth"]').attr('content')})

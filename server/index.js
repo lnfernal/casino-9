@@ -14,7 +14,7 @@ let current_bets = []
 
 let current_mines = []
 
-Array.prototype.remove = function() {
+Array.prototype.remove = function () {
     var what, a = arguments, L = a.length, ax;
     while (L && this.length) {
         what = a[--L];
@@ -25,7 +25,7 @@ Array.prototype.remove = function() {
     return this;
 }
 
-function endMineGame(game_id){
+function endMineGame(game_id) {
     let game = current_mines.find(g => g.socket_id === game_id)
     current_mines.remove(game)
 }
@@ -76,20 +76,20 @@ io.on('connection', (socket) => {
 
     socket.on('mine_clicked', mine => {
         let game = current_mines.find(g => g.socket_id === socket.id)
-        if(game){
-            if(!game.clicked_items.includes(mine.clicked_button_id)){
+        if (game) {
+            if (!game.clicked_items.includes(mine.clicked_button_id)) {
                 game.addClicked(mine.clicked_button_id)
-                if(game.array_bombs.indexOf(Number(mine.clicked_button_id)) >= 0){
+                if (game.array_bombs.indexOf(Number(mine.clicked_button_id)) >= 0) {
                     io.sockets.to(socket.id).emit('loss', mine.clicked_button_id)
                     endMineGame(socket.id)
-                }else{
+                } else {
                     game.addHit()
                     game.multiply()
                     io.sockets.to(socket.id).emit('new_payback', game.current_payback.toFixed(2))
                     io.sockets.to(socket.id).emit('win', mine.clicked_button_id)
                 }
             }
-        }else{
+        } else {
             io.sockets.to(socket.id).emit('notify_error', 'Você deve começar um novo jogo')
         }
     })
@@ -97,18 +97,26 @@ io.on('connection', (socket) => {
     socket.on('end_mine_game', game_id => {
         let game = current_mines.find(g => g.socket_id === socket.id)
 
-        if(game){
-            connection.query(`UPDATE users SET balance = balance + ${game.current_payback} WHERE username = '${game.author}'`, err => {
-                if(err){
-                    console.log(err)
-                }
-            })
-            
-            endMineGame(game_id)
-            io.sockets.to(socket.id).emit('notify_success', `Você ganhou R$${game.current_payback.toFixed(2)} com sua aposta!`)
-            io.sockets.to(socket.id).emit('increase_balance', Number(game.current_payback))
+        if (game) {
+            if (game.hits == 0) {
+                io.sockets.to(socket.id).emit('notify_error', 'Você deve fazer uma jogada antes de parar')
+            } else {
+                connection.query(`UPDATE users SET balance = balance + ${game.current_payback} WHERE username = '${game.author}'`, err => {
+                    if (err) {
+                        console.log(err)
+                    }
+                })
+
+                endMineGame(game_id)
+                io.sockets.to(socket.id).emit('notify_success', `Você ganhou R$${game.current_payback.toFixed(2)} com sua aposta!`)
+                io.sockets.to(socket.id).emit('increase_balance', Number(game.current_payback))
+
+                io.sockets.to(socket.id).emit('reset_board', socket.id)
+            }
+
+        }else{
+            io.sockets.to(socket.id).emit('reset_board', socket.id)
         }
-        io.sockets.to(socket.id).emit('reset_board', socket.id)
     })
 
     socket.on('mines_bet', mine_bet => {
@@ -122,24 +130,24 @@ io.on('connection', (socket) => {
                     io.sockets.to(socket.id).emit('notify_error', err)
                 } else {
                     if (row.length > 0) {
-                        if(!current_mines.find(g => g.socket_id === socket.id)){
+                        if (!current_mines.find(g => g.socket_id === socket.id)) {
                             if (mine_bet.value <= row[0].balance) {
                                 io.sockets.to(mine_bet.socket_id).emit('notify_success', 'Jogo Iniciado')
                                 connection.query(`UPDATE users SET balance = balance - ${mine_bet.value} WHERE username = '${user}'`, err => {
-                                    if(err){
+                                    if (err) {
                                         console.log(err)
-                                    }else{
+                                    } else {
                                         io.sockets.to(socket.id).emit('decrease_balance', mine_bet.value)
                                     }
                                 })
-    
+
                                 current_mines.push(new MineGame(mine_bet.socket_id, mine_bet.mine_count, mine_bet.value, user))
-    
+
                                 io.sockets.to(socket.id).emit('start_mine_game', socket.id)
                             } else {
                                 io.sockets.to(socket.id).emit('notify_error', 'Saldo Insuficiente')
                             }
-                        }else{
+                        } else {
                             io.sockets.to(socket.id).emit('notify_error', 'Um jogo já foi iniciado')
                         }
                     }
@@ -163,44 +171,44 @@ class MineGame {
 
         this.probability = (25 - mine_count) / 25
 
-        this.multiplier = function(){
+        this.multiplier = function () {
             return 0.97 / this.probability
         }
 
-        this.addHit = function(){
+        this.addHit = function () {
             this.hits++
         }
 
-        this.multiply = function(){
-            this.current_payback = this.current_payback * 0.97/this.probability
+        this.multiply = function () {
+            this.current_payback = this.current_payback * 0.97 / this.probability
         }
 
-        this.addClicked = function(number){
+        this.addClicked = function (number) {
             this.clicked_items.push(number)
         }
 
         this.array_bombs = []
 
-        for(let i = 0; i < mine_count; i++){
+        for (let i = 0; i < mine_count; i++) {
             let num = generateNumber(0, 24)
 
-            if(this.array_bombs.includes(num)){
+            if (this.array_bombs.includes(num)) {
                 i--
-            }else{
+            } else {
                 this.array_bombs.push(num)
             }
         }
     }
 
-    get multiplicador(){
+    get multiplicador() {
         return this.CalculoMultiplicador()
     }
 
-    CalculoMultiplicador(){
-        return 0.97/this.probability
+    CalculoMultiplicador() {
+        return 0.97 / this.probability
     }
 
-    get hitQty(){
+    get hitQty() {
         return this.hits
     }
 
