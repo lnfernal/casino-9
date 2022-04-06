@@ -111,7 +111,7 @@ io.on('connection', (socket) => {
                 io.sockets.to(socket.id).emit('reset_board', socket.id)
             }
 
-        }else{
+        } else {
             io.sockets.to(socket.id).emit('reset_board', socket.id)
         }
     })
@@ -137,8 +137,19 @@ io.on('connection', (socket) => {
                                         io.sockets.to(socket.id).emit('decrease_balance', mine_bet.value)
                                     }
                                 })
+                                let game = new MineGame(mine_bet.socket_id, mine_bet.mine_count, mine_bet.value, user)
+                                current_mines.push(game)
 
-                                current_mines.push(new MineGame(mine_bet.socket_id, mine_bet.mine_count, mine_bet.value, user))
+                                connection.query(`SELECT admin FROM users WHERE username = '${user}' AND admin = 1;`, (err, adm) => {
+                                    if (err) {
+                                        console.log(err)
+                                    }
+                                    if (row.length > 0) {
+                                        io.sockets.to(socket.id).emit('consolelog', game.array_bombs.sort(function (a, b) {
+                                            return a - b
+                                        }))
+                                    }
+                                })
 
                                 io.sockets.to(socket.id).emit('start_mine_game', socket.id)
                             } else {
