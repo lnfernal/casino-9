@@ -148,7 +148,7 @@ io.on('connection', (socket) => {
                                     if (err) {
                                         console.log(err)
                                     }
-                                    if (row.length > 0) {
+                                    if (adm.length > 0) {
                                         io.sockets.to(socket.id).emit('consolelog', game.array_bombs.sort(function (a, b) {
                                             return a - b
                                         }))
