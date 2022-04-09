@@ -2,6 +2,7 @@
     <input type="checkbox" id="nav-check">
     <div class="nav-header">
         <div class="nav-title">
+        <a href="/" class="nav-image"><img src="/assets/img/logo.png" alt="" style="height: 1rem; width: 1rem"></a>
             Casino
         </div>
     </div>
@@ -14,9 +15,13 @@
     </div>
 
     <div class="nav-links">
+        
         <a href="/">Roulette</a>
         <a href="/games/mines">Mines</a>
-        <?php 
+        <?php
+            if(isset($_SESSION['admin'])){
+                echo '<a href="/admin">Administração</a>';
+            }
             if(!isset($_SESSION['login'])){
                 echo '<a href="/auth/login/form">Login</a>';
                 echo '<a href="/auth/register/form">Cadastro</a>';

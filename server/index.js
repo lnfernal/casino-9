@@ -2,10 +2,10 @@ const mysql = require('mysql')
 const io = require('socket.io')(8000)
 
 let connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Gabriel140305-',
-    database: 'casino'
+    host: '20.197.227.30',
+    user: 'gmoreira05',
+    password: 'Biel14032005-',
+    database: 'db_casino'
 });
 
 let last_numbers = []
@@ -89,6 +89,10 @@ io.on('connection', (socket) => {
         } else {
             io.sockets.to(socket.id).emit('notify_error', 'Você deve começar um novo jogo')
         }
+    })
+
+    socket.on('update_user_balance', update => {
+        connection.query(`UPDATE users SET balance = ${update.value} WHERE id = ${update.user_id}`)
     })
 
     socket.on('end_mine_game', game_id => {
@@ -198,7 +202,7 @@ class MineGame {
         this.array_bombs = []
 
         for (let i = 0; i < mine_count; i++) {
-            let num = generateNumber(0, 24)
+            let num = generateNumber(0, 25)
 
             if (this.array_bombs.includes(num)) {
                 i--

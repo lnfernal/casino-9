@@ -3,10 +3,10 @@
 class UserModel
 {
 
-    public $id, $username, $password, $balance, $cpf, $email, $data_nascimento, $data_criado;
+    public $id, $username, $password, $balance, $cpf, $email, $data_nascimento, $data_criado, $admin;
 
     public function save(){
-        include 'DAO/UserDAO.php';
+        require_once 'DAO/UserDAO.php';
 
         $dao = new UserDAO();
 
@@ -16,7 +16,7 @@ class UserModel
     }
 
     public function verify(){
-        include 'DAO/UserDAO.php';
+        require_once 'DAO/UserDAO.php';
 
         $dao = new UserDAO();
 
@@ -27,8 +27,20 @@ class UserModel
         }
     }
 
+    public function isAdmin(){
+        require_once 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        if($dao->isAdmin($this)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function getBalance(){
-        include 'DAO/UserDAO.php';
+        require_once 'DAO/UserDAO.php';
 
         $dao = new UserDAO();
 

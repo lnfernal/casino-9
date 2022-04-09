@@ -6,9 +6,9 @@ class UserDAO
 
     function __construct()
     {
-        $dsn = "mysql:host=localhost;dbname=casino";
-        $user = "root";
-        $pass = "Gabriel140305-";
+        $dsn = "mysql:host=20.197.227.30;dbname=db_casino";
+        $user = "gmoreira05";
+        $pass = "Biel14032005-";
 
         $this->conexao = new PDO($dsn, $user, $pass);
     }
@@ -27,6 +27,22 @@ class UserDAO
         $stmt->bindValue(6, $model->data_criado);
 
         $stmt->execute();
+    }
+
+    function isAdmin(UserModel $model){
+        $sql = "SELECT admin FROM users WHERE username = ? AND admin = 1";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bindValue(1, $model->username);
+
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     function verify(UserModel $model){

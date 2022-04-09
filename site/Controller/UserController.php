@@ -14,7 +14,7 @@ class UserController
 
     public static function verifyLogin()
     {
-        include 'Model/UserModel.php';
+        require_once 'Model/UserModel.php';
 
         $user = new UserModel();
 
@@ -31,8 +31,12 @@ class UserController
         }
     }
 
+    public static function adminPage(){
+        include 'View/Modules/admin/home.php';
+    }
+
     public static function getBalance(){
-        include 'Model/UserModel.php';
+        require_once 'Model/UserModel.php';
 
         $user = new UserModel();
 
@@ -48,8 +52,7 @@ class UserController
     }
 
     public static function save() {
-
-        include 'Model/UserModel.php'; 
+        require_once 'Model/UserModel.php'; 
 
         $user = new UserModel();
 

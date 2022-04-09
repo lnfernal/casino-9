@@ -1,8 +1,7 @@
 <?php
 
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-include 'Controller/UserController.php';
-include 'Controller/AdminController.php';
+require_once 'Controller/UserController.php';
 
 session_start();
 
@@ -36,15 +35,7 @@ switch($url){
     break;
 
     case '/admin':
-        include 'View/Modules/admin/home.php';    
-    break;
-
-    case '/admin/auth/login/form':
-        AdminController::formLogin();
-    break;
-
-    case '/admin/auth/login':
-        AdminController::verifyLogin();
+        UserController::adminPage();
     break;
 }
 

@@ -69,6 +69,7 @@ if (isset($_SESSION['login'])) {
       </form>
     </div>
     <script>
+      /*
       $('#confirmasenha').change(function() {
         if ($('#confirmasenha').val() !== $('#senha')) {
           $('.button').prop('disabled', true)
@@ -76,6 +77,7 @@ if (isset($_SESSION['login'])) {
           $('.button').prop('disabled', false)
         }
       })
+      */
     </script>
 </body>
 
